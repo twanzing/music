@@ -7,29 +7,34 @@ from pyechonest import song
 config.ECHO_NEST_API_KEY="ADPSTO1TYQSNQSBGV"
 
 class EN(object):
-	def __init__(self, name):
-		results = artist.search(name=name)
-		if (results):
-			self.artist = results[0]
-		else:
-			print "Can't find artist %s " %(name,)
+	def __init__(self, name=nil, artistObj=nil):
+	    if artistObj:
+		self.artist = artistObj
+		return
 
-	def similarArtists(self):
-		print "Artists similar to: %s:" % (self.artist.name,)
-		for similar_artist in self.artist.similar:
-			print "\t%s" % (similar_artist.name,)
+	    results = artist.search(name=name)
+	    if (results):
+		self.artist = results[0]
+	    else:
+		print "Can't find artist %s " %(name,)
 
-	def spotifySongs(self):
+	def similarArtists(self, results=10):
+	    print "Artists similar to: %s:" % (self.artist.name,)
+	    return self.artist.get_similar(results=results, min_hotttnesss=0.5)
+
+	def spotifySongs(self, results=10):
 	    print "Songs of %s " % (self.artist.name)
-	    for song in self.artist.songs:
+	    spotifySongs = []
+	    for song in self.artist.get_songs(results=results):
 	    	print "Songs %s" % (song.title)
-		print "ID: " + song.id
 		track = song.get_tracks('spotify-WW')
 		if len(track) == 0:
 		    print "No associated spotify track!"
 		else:
 		    print "SPOTIFY ID: " + track[0]['foreign_id']
-		
+		    spotifySongs.append(track[0]['foreign_id'])
+	    return spotifySongs
+
 	def getMusicBrainzID(self):
 	    idString = self.artist.get_foreign_id('musicbrainz').split(":")
 	    return idString[2]
