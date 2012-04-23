@@ -19,9 +19,9 @@ def getNearByShows(location, distance, mbid):
 	if not isUS.search(venueLocation):
 	    print "not in US"
 	    continue
-	print "directions between " + location + " and " + venueLocation
+#	print "directions between " + location + " and " + venueLocation
         direction = gmaps.directions(location, venueLocation)
-	print direction['Directions']['Distance']['meters']
+#	print direction['Directions']['Distance']['meters']
 	if direction['Directions']['Distance']['meters'] < distance:
 	    print("Found near by show! %s" % venueLocation)
 	    nearByShows.append(event) 
@@ -65,7 +65,7 @@ def getHeadliner(show):
 	    #headliner!
 	    return perf['artist']['displayName']
 
-def committedShowPlayList():
+def committedShowsPlaylist():
     parser = OptionParser()
     parser.add_option("-a", "--artists", dest="thisArtist", help="query on this artist")
     parser.add_option("-l", "--location", dest="location", default="318 Highland Ave., Somerville, MA", help="your current location(city)")
@@ -87,15 +87,15 @@ def committedShowPlayList():
 	committedShowsPlaylist[i] = elements[2]
 
     # now lets see if there are similar artists of the ones I like
-    similar = []
-    for artist in artists:
+#    similar = []
+#    for artist in artists:
 	# just get 2 for now
-        similar = similar + artist.similarArtists(results=2)
+#        similar = similar + artist.similarArtists(results=2)
     
-    for simArtist in similar:
-	print "Similar artists: " + simArtist.name
-	simArtist = EN(simArtist)	
-  	mbid = simArtist.getMusicBrainzID()
-  	print getNearByShows(options.location, options.distance, mbid)
+#    for simArtist in similar:
+#	print "Similar artists: " + simArtist.name
+#	simArtist = EN(simArtist)	
+#  	mbid = simArtist.getMusicBrainzID()
+#  	print getNearByShows(options.location, options.distance, mbid)
     
     return ", ".join(committedShowsPlaylist)
